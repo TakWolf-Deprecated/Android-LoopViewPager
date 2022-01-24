@@ -8,4 +8,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Android-LoopViewPager"
 
-include(":app")
+include(":app", ":loopviewpager")
