@@ -18,4 +18,16 @@
         tools:src="@mipmap/ic_launcher"
         tools:ignore="ContentDescription" />
 
+    <TextView
+        android:id="@+id/tv_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        android:background="@color/dim"
+        tools:text="1 - 1" />
+
 </androidx.cardview.widget.CardView>

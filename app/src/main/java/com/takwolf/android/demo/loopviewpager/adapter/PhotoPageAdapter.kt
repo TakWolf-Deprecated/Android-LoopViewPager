@@ -1,5 +1,6 @@
 package com.takwolf.android.demo.loopviewpager.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -20,10 +21,12 @@ class PhotoPageAdapter : ListAdapter<Photo, PhotoPageAdapter.ViewHolder>(PhotoDi
     }
 
     class ViewHolder(private val binding: ItemPageBinding) : RecyclerView.ViewHolder(binding.root) {
+        @SuppressLint("SetTextI18n")
         fun bind(photo: Photo) {
             binding.imgPhoto.load(photo.url) {
                 placeholder(R.color.image_placeholder)
             }
+            binding.tvInfo.text = "$bindingAdapterPosition - $absoluteAdapterPosition"
         }
     }
 }
