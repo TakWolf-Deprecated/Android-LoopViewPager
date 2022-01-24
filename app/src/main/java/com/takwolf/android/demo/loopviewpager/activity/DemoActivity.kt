@@ -3,9 +3,9 @@ package com.takwolf.android.demo.loopviewpager.activity
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.viewpager2.widget.MarginPageTransformer
 import com.takwolf.android.demo.loopviewpager.adapter.PhotoPageAdapter
 import com.takwolf.android.demo.loopviewpager.databinding.ActivityDemoBinding
-import com.takwolf.android.demo.loopviewpager.helper.PhotoViewHelper
 import com.takwolf.android.demo.loopviewpager.vm.PhotoListViewModel
 
 class DemoActivity : AppCompatActivity() {
@@ -20,8 +20,11 @@ class DemoActivity : AppCompatActivity() {
             finish()
         }
 
+        binding.viewPager.viewPager2.offscreenPageLimit = 1
         val adapter = PhotoPageAdapter()
-        PhotoViewHelper.listen(this, photoListViewModel, adapter)
-        binding.viewPager.viewPager.adapter = adapter
+        photoListViewModel.entitiesData.observe(this) { photos ->
+            adapter.submitList(ArrayList(photos))
+        }
+        binding.viewPager.viewPager2.adapter = adapter
     }
 }

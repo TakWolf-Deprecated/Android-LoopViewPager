@@ -16,10 +16,14 @@
         app:title="Demo"
         app:navigationIcon="?attr/homeAsUpIndicator" />
 
-    <com.takwolf.android.loopviewpager.LoopViewPager
+    <com.takwolf.android.loopviewpager2.ViewPager2
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="200dp"
+        android:paddingHorizontal="32dp"
+        android:paddingVertical="8dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

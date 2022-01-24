@@ -39,7 +39,7 @@ afterEvaluate {
     publishing {
         publications {
             create<MavenPublication>("release") {
-                groupId = "com.takwolf.android.loopviewpager"
+                groupId = "com.takwolf.android.loopviewpager2"
                 artifactId = "loopviewpager"
                 version = "0.0.1"
 
