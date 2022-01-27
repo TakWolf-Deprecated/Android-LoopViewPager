@@ -40,7 +40,7 @@ afterEvaluate {
         publications {
             create<MavenPublication>("release") {
                 groupId = "com.takwolf.android.loopviewpager2"
-                artifactId = "loopviewpager"
+                artifactId = "loopviewpager2"
                 version = "0.0.1"
 
                 from(components["release"])
