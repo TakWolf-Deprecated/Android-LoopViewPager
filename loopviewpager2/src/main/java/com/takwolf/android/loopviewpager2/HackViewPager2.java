@@ -77,13 +77,13 @@ public class HackViewPager2 extends ViewGroup {
         return recyclerView;
     }
 
-    public void setOrientation(@ViewPager2.Orientation int orientation) {
-        viewPager2.setOrientation(orientation);
-    }
-
     @ViewPager2.Orientation
     public int getOrientation() {
         return viewPager2.getOrientation();
+    }
+
+    public void setOrientation(@ViewPager2.Orientation int orientation) {
+        viewPager2.setOrientation(orientation);
     }
 
     @Override
