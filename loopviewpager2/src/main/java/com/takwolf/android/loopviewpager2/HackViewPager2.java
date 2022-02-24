@@ -2,13 +2,11 @@ package com.takwolf.android.loopviewpager2;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Rect;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.util.SparseArray;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -23,9 +21,6 @@ import androidx.viewpager2.widget.ViewPager2;
 public class HackViewPager2 extends ViewGroup {
     final ViewPager2 viewPager2;
     final RecyclerView recyclerView;
-
-    private final Rect tmpContainerRect = new Rect();
-    private final Rect tmpChildRect = new Rect();
 
     public HackViewPager2(@NonNull Context context) {
         this(context, null);
@@ -45,6 +40,7 @@ public class HackViewPager2 extends ViewGroup {
         viewPager2 = new ViewPager2(context);
         viewPager2.setId(View.generateViewId());
         recyclerView = (RecyclerView) viewPager2.getChildAt(0);
+        recyclerView.setPadding(super.getPaddingLeft(), super.getPaddingTop(), super.getPaddingRight(), super.getPaddingBottom());
 
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.HackViewPager2, defStyleAttr, defStyleRes);
         viewPager2.setOrientation(a.getInt(R.styleable.HackViewPager2_android_orientation, ViewPager2.ORIENTATION_HORIZONTAL));
@@ -110,34 +106,56 @@ public class HackViewPager2 extends ViewGroup {
     }
 
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        measureChild(viewPager2, widthMeasureSpec, heightMeasureSpec);
+    public int getPaddingTop() {
+        return recyclerView.getPaddingTop();
+    }
 
-        int width = viewPager2.getMeasuredWidth();
-        int height = viewPager2.getMeasuredHeight();
-        int childState = viewPager2.getMeasuredState();
+    @Override
+    public int getPaddingBottom() {
+        return recyclerView.getPaddingBottom();
+    }
 
-        width += getPaddingLeft() + getPaddingRight();
-        height += getPaddingTop() + getPaddingBottom();
+    @Override
+    public int getPaddingLeft() {
+        return recyclerView.getPaddingLeft();
+    }
 
-        width = Math.max(width, getSuggestedMinimumWidth());
-        height = Math.max(height, getSuggestedMinimumHeight());
+    @Override
+    public int getPaddingStart() {
+        return recyclerView.getPaddingStart();
+    }
 
-        setMeasuredDimension(resolveSizeAndState(width, widthMeasureSpec, childState), resolveSizeAndState(height, heightMeasureSpec, childState << MEASURED_HEIGHT_STATE_SHIFT));
+    @Override
+    public int getPaddingRight() {
+        return recyclerView.getPaddingRight();
+    }
+
+    @Override
+    public int getPaddingEnd() {
+        return recyclerView.getPaddingEnd();
+    }
+
+    @Override
+    public boolean isPaddingRelative() {
+        return recyclerView.isPaddingRelative();
+    }
+
+    @Override
+    public void setPadding(int left, int top, int right, int bottom) {
+        super.setPadding(left, top, right, bottom);
+        recyclerView.setPadding(left, top, right, bottom);
+    }
+
+    @Override
+    public void setPaddingRelative(int start, int top, int end, int bottom) {
+        super.setPaddingRelative(start, top, end, bottom);
+        recyclerView.setPaddingRelative(start, top, end, bottom);
     }
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        int width = viewPager2.getMeasuredWidth();
-        int height = viewPager2.getMeasuredHeight();
-
-        tmpContainerRect.left = getPaddingLeft();
-        tmpContainerRect.right = r - l - getPaddingRight();
-        tmpContainerRect.top = getPaddingTop();
-        tmpContainerRect.bottom = b - t - getPaddingBottom();
-
-        Gravity.apply(Gravity.TOP | Gravity.START, width, height, tmpContainerRect, tmpChildRect);
-        viewPager2.layout(tmpChildRect.left, tmpChildRect.top, tmpChildRect.right, tmpChildRect.bottom);
+        viewPager2.layout(l, t, r, b);
+        recyclerView.layout(l, t, r, b);
     }
 
     @Nullable
