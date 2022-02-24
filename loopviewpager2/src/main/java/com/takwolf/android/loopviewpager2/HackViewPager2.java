@@ -1,6 +1,7 @@
 package com.takwolf.android.loopviewpager2;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -12,31 +13,37 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StyleRes;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
-public class ViewPager2 extends ViewGroup {
-    private final androidx.viewpager2.widget.ViewPager2 viewPager2;
+public class HackViewPager2 extends ViewGroup {
+    final ViewPager2 viewPager2;
+    final RecyclerView recyclerView;
 
     private final Rect tmpContainerRect = new Rect();
     private final Rect tmpChildRect = new Rect();
 
-    public ViewPager2(@NonNull Context context) {
+    public HackViewPager2(@NonNull Context context) {
         this(context, null);
     }
 
-    public ViewPager2(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public HackViewPager2(@NonNull Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public ViewPager2(@NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr) {
+    public HackViewPager2(@NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr) {
         this(context, attrs, defStyleAttr, 0);
     }
 
-    public ViewPager2(@NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr, @StyleRes int defStyleRes) {
+    public HackViewPager2(@NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr, @StyleRes int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
 
-        viewPager2 = new androidx.viewpager2.widget.ViewPager2(context);
+        viewPager2 = new ViewPager2(context);
         viewPager2.setId(View.generateViewId());
-        RecyclerView recyclerView = (RecyclerView) viewPager2.getChildAt(0);
+        recyclerView = (RecyclerView) viewPager2.getChildAt(0);
+
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.HackViewPager2, defStyleAttr, defStyleRes);
+        viewPager2.setOrientation(a.getInt(R.styleable.HackViewPager2_android_orientation, ViewPager2.ORIENTATION_HORIZONTAL));
+        a.recycle();
 
         boolean clipChildren = getClipChildren();
         viewPager2.setClipChildren(clipChildren);
@@ -50,11 +57,6 @@ public class ViewPager2 extends ViewGroup {
         attachViewToParent(viewPager2, 0, viewPager2.getLayoutParams());
     }
 
-    @NonNull
-    public androidx.viewpager2.widget.ViewPager2 getViewPager2() {
-        return viewPager2;
-    }
-
     @Override
     public void onViewAdded(View child) {
         throw new IllegalStateException(getClass().getSimpleName() + " does not support direct child views");
@@ -65,12 +67,30 @@ public class ViewPager2 extends ViewGroup {
         throw new IllegalStateException(getClass().getSimpleName() + " does not support direct child views");
     }
 
+    @NonNull
+    public ViewPager2 getViewPager2() {
+        return viewPager2;
+    }
+
+    @NonNull
+    public RecyclerView getRecyclerView() {
+        return recyclerView;
+    }
+
+    public void setOrientation(@ViewPager2.Orientation int orientation) {
+        viewPager2.setOrientation(orientation);
+    }
+
+    @ViewPager2.Orientation
+    public int getOrientation() {
+        return viewPager2.getOrientation();
+    }
+
     @Override
     public void setClipChildren(boolean clipChildren) {
         super.setClipChildren(clipChildren);
         if (viewPager2 != null) {
             viewPager2.setClipChildren(clipChildren);
-            RecyclerView recyclerView = (RecyclerView) viewPager2.getChildAt(0);
             recyclerView.setClipChildren(clipChildren);
         }
     }
@@ -80,7 +100,6 @@ public class ViewPager2 extends ViewGroup {
         super.setClipToPadding(clipToPadding);
         if (viewPager2 != null) {
             viewPager2.setClipToPadding(clipToPadding);
-            RecyclerView recyclerView = (RecyclerView) viewPager2.getChildAt(0);
             recyclerView.setClipToPadding(clipToPadding);
         }
     }

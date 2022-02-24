@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StyleRes;
 
-public class LoopViewPager2 extends ViewPager2 {
+public class LoopViewPager2 extends HackViewPager2 {
     public LoopViewPager2(@NonNull Context context) {
         this(context, null);
     }

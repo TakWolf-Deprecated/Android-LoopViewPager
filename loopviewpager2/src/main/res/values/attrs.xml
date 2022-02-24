@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <declare-styleable name="HackViewPager2">
+        <attr name="android:orientation" />
+    </declare-styleable>
+
     <declare-styleable name="LoopViewPager2">
     </declare-styleable>
 </resources>
