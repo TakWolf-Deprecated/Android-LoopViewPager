@@ -3,7 +3,11 @@ package com.takwolf.android.loopviewpager2;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Rect;
+import android.os.Build;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.AttributeSet;
+import android.util.SparseArray;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +15,7 @@ import android.view.ViewGroup;
 import androidx.annotation.AttrRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.annotation.StyleRes;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
@@ -133,5 +138,86 @@ public class HackViewPager2 extends ViewGroup {
 
         Gravity.apply(Gravity.TOP | Gravity.START, width, height, tmpContainerRect, tmpChildRect);
         viewPager2.layout(tmpChildRect.left, tmpChildRect.top, tmpChildRect.right, tmpChildRect.bottom);
+    }
+
+    @Nullable
+    @Override
+    protected Parcelable onSaveInstanceState() {
+        SavedState savedState = new SavedState(super.onSaveInstanceState());
+        savedState.viewPagerId = viewPager2.getId();
+        return savedState;
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Parcelable state) {
+        if (!(state instanceof SavedState)) {
+            super.onRestoreInstanceState(state);
+            return;
+        }
+        SavedState savedState = (SavedState) state;
+        super.onRestoreInstanceState(savedState.getSuperState());
+    }
+
+    @Override
+    protected void dispatchRestoreInstanceState(SparseArray<Parcelable> container) {
+        Parcelable state = container.get(getId());
+        if (state instanceof SavedState) {
+            SavedState savedState = (SavedState) state;
+            int previousVpId = savedState.viewPagerId;
+            int currentVpId = viewPager2.getId();
+            container.put(currentVpId, container.get(previousVpId));
+            container.remove(previousVpId);
+        }
+        super.dispatchRestoreInstanceState(container);
+    }
+
+    private static class SavedState extends BaseSavedState {
+        int viewPagerId;
+
+        public SavedState(Parcelable superState) {
+            super(superState);
+        }
+
+        public SavedState(Parcel source) {
+            super(source);
+            readValues(source, null);
+        }
+
+        @RequiresApi(Build.VERSION_CODES.N)
+        public SavedState(Parcel source, ClassLoader loader) {
+            super(source, loader);
+            readValues(source, loader);
+        }
+
+        private void readValues(@NonNull Parcel source, @Nullable ClassLoader loader) {
+            viewPagerId = source.readInt();
+        }
+
+        @Override
+        public void writeToParcel(Parcel out, int flags) {
+            super.writeToParcel(out, flags);
+            out.writeInt(viewPagerId);
+        }
+
+        public static final Creator<SavedState> CREATOR = new ClassLoaderCreator<SavedState>() {
+            @Override
+            public SavedState createFromParcel(Parcel source, ClassLoader loader) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    return new SavedState(source, loader);
+                } else {
+                    return new SavedState(source);
+                }
+            }
+
+            @Override
+            public SavedState createFromParcel(Parcel source) {
+                return createFromParcel(source, null);
+            }
+
+            @Override
+            public SavedState[] newArray(int size) {
+                return new SavedState[size];
+            }
+        };
     }
 }
