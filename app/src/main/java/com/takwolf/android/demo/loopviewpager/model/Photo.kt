@@ -1,7 +1,6 @@
-package com.takwolf.android.demo.loopviewpager.data
+package com.takwolf.android.demo.loopviewpager.model
 
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.math.abs
 import kotlin.random.Random
 
@@ -33,13 +32,10 @@ data class Photo(
             "https://static.takwolf.com/app-test/minami-kotori/19.jpg",
         )
 
-        fun getList(size: Int = 100): MutableList<Photo> {
-            val list = ArrayList<Photo>()
-            repeat(size) {
-                val position = abs(Random.nextInt() % URLS.size)
-                list.add(Photo(UUID.randomUUID().toString(), URLS[position]))
+        fun getList(size: Int = 5): MutableList<Photo> {
+            return MutableList(size) {
+                Photo(UUID.randomUUID().toString(), URLS[abs(Random.nextInt() % URLS.size)])
             }
-            return list
         }
     }
 }
