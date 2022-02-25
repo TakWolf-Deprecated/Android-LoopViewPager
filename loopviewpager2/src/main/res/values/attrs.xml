@@ -5,5 +5,7 @@
     </declare-styleable>
 
     <declare-styleable name="LoopViewPager2">
+        <attr name="lvp_lopping" format="boolean" />
+        <attr name="lvp_fakeOffset" format="integer" />
     </declare-styleable>
 </resources>

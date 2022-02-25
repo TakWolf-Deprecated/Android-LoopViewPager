@@ -10,6 +10,9 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StyleRes;
 
 public class LoopViewPager2 extends HackViewPager2 {
+    private boolean lopping;
+    private int fakeOffset;
+
     public LoopViewPager2(@NonNull Context context) {
         this(context, null);
     }
@@ -26,7 +29,8 @@ public class LoopViewPager2 extends HackViewPager2 {
         super(context, attrs, defStyleAttr, defStyleRes);
 
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.LoopViewPager2, defStyleAttr, defStyleRes);
-        // TODO
+        lopping = a.getBoolean(R.styleable.LoopViewPager2_lvp_lopping, true);
+        fakeOffset = a.getInt(R.styleable.LoopViewPager2_lvp_fakeOffset, 1);
         a.recycle();
     }
 }
