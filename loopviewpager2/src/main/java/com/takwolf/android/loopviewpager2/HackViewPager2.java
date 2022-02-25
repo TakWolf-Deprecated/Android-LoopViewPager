@@ -153,9 +153,22 @@ public class HackViewPager2 extends ViewGroup {
     }
 
     @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        measureChild(recyclerView, widthMeasureSpec, heightMeasureSpec);
+        int childWidth = recyclerView.getMeasuredWidth();
+        int childHeight = recyclerView.getMeasuredHeight();
+        int childState = recyclerView.getMeasuredState();
+        setMeasuredDimension(resolveSizeAndState(childWidth, widthMeasureSpec, childState), resolveSizeAndState(childHeight, heightMeasureSpec, childState));
+    }
+
+    @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        viewPager2.layout(l, t, r, b);
-        recyclerView.layout(l, t, r, b);
+        int left = 0;
+        int right = r - l;
+        int top = 0;
+        int bottom = b - t;
+        viewPager2.layout(left, top, right, bottom);
+        recyclerView.layout(left, top, right, bottom);
     }
 
     @Nullable
