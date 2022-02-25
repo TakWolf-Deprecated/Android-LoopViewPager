@@ -61,16 +61,6 @@ public class HackViewPager2 extends ViewGroup {
         attachViewToParent(viewPager2, 0, viewPager2.getLayoutParams());
     }
 
-    @NonNull
-    public ViewPager2 getViewPager2() {
-        return viewPager2;
-    }
-
-    @NonNull
-    public RecyclerView getRecyclerView() {
-        return recyclerView;
-    }
-
     @Override
     public void onViewAdded(View child) {
         throw new IllegalStateException(getClass().getSimpleName() + " does not support direct child views");

@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
         val binding = ActivityMainBinding.inflate(layoutInflater)
 
         val adapter = PhotoPageAdapter(layoutInflater)
-        binding.viewPager.viewPager2.adapter = adapter
+        binding.viewPager.adapter = adapter
 
         viewMode.photosData.observe(this) { photos ->
             adapter.submitList(photos?.toList())
