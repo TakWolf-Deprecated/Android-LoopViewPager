@@ -94,7 +94,10 @@ public class HackViewPager2 extends ViewGroup {
     }
 
     public void setOrientation(@ViewPager2.Orientation int orientation) {
-        viewPager2.setOrientation(orientation);
+        if (viewPager2.getOrientation() != orientation) {
+            viewPager2.setOrientation(orientation);
+            recyclerView.scrollToPosition(viewPager2.getCurrentItem());
+        }
     }
 
     public void setCurrentItem(int item) {

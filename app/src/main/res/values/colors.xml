@@ -2,6 +2,7 @@
 <resources>
     <color name="app_primary">#FFFFA726</color>
     <color name="app_primary_dark">#FFC77800</color>
+    <color name="app_primary_translucent">#80FFA726</color>
     <color name="image_placeholder">#1F000000</color>
     <color name="dim">#80000000</color>
 </resources>
