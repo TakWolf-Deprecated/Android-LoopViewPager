@@ -3,16 +3,19 @@ package com.takwolf.android.loopviewpager2;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.accessibility.AccessibilityNodeInfo;
 
 import androidx.annotation.AttrRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.Px;
 import androidx.annotation.RequiresApi;
 import androidx.annotation.StyleRes;
 import androidx.recyclerview.widget.RecyclerView;
@@ -58,16 +61,6 @@ public class HackViewPager2 extends ViewGroup {
         attachViewToParent(viewPager2, 0, viewPager2.getLayoutParams());
     }
 
-    @Override
-    public void onViewAdded(View child) {
-        throw new IllegalStateException(getClass().getSimpleName() + " does not support direct child views");
-    }
-
-    @Override
-    public void onViewRemoved(View child) {
-        throw new IllegalStateException(getClass().getSimpleName() + " does not support direct child views");
-    }
-
     @NonNull
     public ViewPager2 getViewPager2() {
         return viewPager2;
@@ -78,6 +71,33 @@ public class HackViewPager2 extends ViewGroup {
         return recyclerView;
     }
 
+    @Override
+    public void onViewAdded(View child) {
+        throw new IllegalStateException(getClass().getSimpleName() + " does not support direct child views");
+    }
+
+    @Override
+    public void onViewRemoved(View child) {
+        throw new IllegalStateException(getClass().getSimpleName() + " does not support direct child views");
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    @Override
+    public CharSequence getAccessibilityClassName() {
+        return viewPager2.getAccessibilityClassName();
+    }
+
+    @SuppressWarnings("rawtypes")
+    public void setAdapter(@Nullable RecyclerView.Adapter adapter) {
+        viewPager2.setAdapter(adapter);
+    }
+
+    @SuppressWarnings("rawtypes")
+    @Nullable
+    public RecyclerView.Adapter getAdapter() {
+        return viewPager2.getAdapter();
+    }
+
     @ViewPager2.Orientation
     public int getOrientation() {
         return viewPager2.getOrientation();
@@ -85,6 +105,128 @@ public class HackViewPager2 extends ViewGroup {
 
     public void setOrientation(@ViewPager2.Orientation int orientation) {
         viewPager2.setOrientation(orientation);
+    }
+
+    public void setCurrentItem(int item) {
+        viewPager2.setCurrentItem(item);
+    }
+
+    public void setCurrentItem(int item, boolean smoothScroll) {
+        viewPager2.setCurrentItem(item, smoothScroll);
+    }
+
+    public int getCurrentItem() {
+        return viewPager2.getCurrentItem();
+    }
+
+    @ViewPager2.ScrollState
+    public int getScrollState() {
+        return viewPager2.getScrollState();
+    }
+
+    public boolean beginFakeDrag() {
+        return viewPager2.beginFakeDrag();
+    }
+
+    public boolean fakeDragBy(@Px float offsetPxFloat) {
+        return viewPager2.fakeDragBy(offsetPxFloat);
+    }
+
+    public boolean endFakeDrag() {
+        return viewPager2.endFakeDrag();
+    }
+
+    public boolean isFakeDragging() {
+        return viewPager2.isFakeDragging();
+    }
+
+    public void setUserInputEnabled(boolean enabled) {
+        viewPager2.setUserInputEnabled(enabled);
+    }
+
+    public boolean isUserInputEnabled() {
+        return viewPager2.isUserInputEnabled();
+    }
+
+    public void setOffscreenPageLimit(@ViewPager2.OffscreenPageLimit int limit) {
+        viewPager2.setOffscreenPageLimit(limit);
+    }
+
+    @ViewPager2.OffscreenPageLimit
+    public int getOffscreenPageLimit() {
+        return viewPager2.getOffscreenPageLimit();
+    }
+
+    @Override
+    public boolean canScrollHorizontally(int direction) {
+        return viewPager2.canScrollHorizontally(direction);
+    }
+
+    @Override
+    public boolean canScrollVertically(int direction) {
+        return viewPager2.canScrollVertically(direction);
+    }
+
+    public void registerOnPageChangeCallback(@NonNull ViewPager2.OnPageChangeCallback callback) {
+        viewPager2.registerOnPageChangeCallback(callback);
+    }
+
+    public void unregisterOnPageChangeCallback(@NonNull ViewPager2.OnPageChangeCallback callback) {
+        viewPager2.unregisterOnPageChangeCallback(callback);
+    }
+
+    public void setPageTransformer(@Nullable ViewPager2.PageTransformer transformer) {
+        viewPager2.setPageTransformer(transformer);
+    }
+
+    public void requestTransform() {
+        viewPager2.requestTransform();
+    }
+
+    @Override
+    public void setLayoutDirection(int layoutDirection) {
+        super.setLayoutDirection(layoutDirection);
+        viewPager2.setLayoutDirection(layoutDirection);
+    }
+
+    @Override
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
+        super.onInitializeAccessibilityNodeInfo(info);
+        viewPager2.onInitializeAccessibilityNodeInfo(info);
+    }
+
+    @Override
+    public boolean performAccessibilityAction(int action, Bundle arguments) {
+        return viewPager2.performAccessibilityAction(action, arguments);
+    }
+
+    public void addItemDecoration(@NonNull RecyclerView.ItemDecoration decor) {
+        viewPager2.addItemDecoration(decor);
+    }
+
+    public void addItemDecoration(@NonNull RecyclerView.ItemDecoration decor, int index) {
+        viewPager2.addItemDecoration(decor, index);
+    }
+
+    @NonNull
+    public RecyclerView.ItemDecoration getItemDecorationAt(int index) {
+        return viewPager2.getItemDecorationAt(index);
+    }
+
+    public int getItemDecorationCount() {
+        return viewPager2.getItemDecorationCount();
+    }
+
+    public void invalidateItemDecorations() {
+        viewPager2.invalidateItemDecorations();
+    }
+
+    public void removeItemDecorationAt(int index) {
+        viewPager2.removeItemDecorationAt(index);
+    }
+
+    public void removeItemDecoration(@NonNull RecyclerView.ItemDecoration decor) {
+        viewPager2.removeItemDecoration(decor);
     }
 
     @Override
