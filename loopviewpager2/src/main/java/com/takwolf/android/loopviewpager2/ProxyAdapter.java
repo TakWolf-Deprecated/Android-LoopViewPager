@@ -137,9 +137,7 @@ final class ProxyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             if (adapter != null) {
                 int newDataItemCount = adapter.getItemCount();
                 if (isLoppingActually()) {
-                    if (lastDataItemCount == 0 && newDataItemCount != 0) {
-                        loopViewPager2.setCurrentItem(0, false);
-                    } else if (loopViewPager2.lastPosition >= newDataItemCount) {
+                    if ((lastDataItemCount == 0 && newDataItemCount != 0) || loopViewPager2.lastPosition >= newDataItemCount) {
                         loopViewPager2.setCurrentItem(0, false);
                     }
                 }
