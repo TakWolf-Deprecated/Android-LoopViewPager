@@ -32,8 +32,8 @@ data class Photo(
             "https://static.takwolf.com/app-test/minami-kotori/19.jpg",
         )
 
-        fun getList(size: Int = 5): MutableList<Photo> {
-            return MutableList(size) {
+        fun getList(): MutableList<Photo> {
+            return MutableList(Random.nextInt(10)) {
                 Photo(UUID.randomUUID().toString(), URLS[abs(Random.nextInt() % URLS.size)])
             }
         }

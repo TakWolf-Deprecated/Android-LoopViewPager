@@ -1,5 +1,6 @@
 package com.takwolf.android.loopviewpager2;
 
+import android.annotation.SuppressLint;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -8,8 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-import kotlin.NotImplementedError;
-
 final class ProxyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @NonNull
     private final LoopViewPager2 loopViewPager2;
@@ -17,6 +16,8 @@ final class ProxyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @SuppressWarnings("rawtypes")
     @Nullable
     private RecyclerView.Adapter adapter;
+
+    private int lastDataItemCount = 0;
 
     ProxyAdapter(@NonNull LoopViewPager2 loopViewPager2) {
         this.loopViewPager2 = loopViewPager2;
@@ -38,6 +39,7 @@ final class ProxyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         boolean hasStableIds;
         StateRestorationPolicy stateRestorationPolicy;
         if (adapter != null) {
+            lastDataItemCount = adapter.getItemCount();
             adapter.registerAdapterDataObserver(innerAdapterDataObserver);
             adapter.onAttachedToRecyclerView(loopViewPager2.recyclerView);
             hasStableIds = adapter.hasStableIds();
@@ -68,7 +70,7 @@ final class ProxyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return adapter == null ? 0 : adapter.getItemCount();
     }
 
-    private boolean isLoppingActually() {
+    boolean isLoppingActually() {
         return loopViewPager2.lopping && loopViewPager2.fakeOffset > 0 && getDataItemCount() > 0;
     }
 
@@ -84,37 +86,41 @@ final class ProxyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    int[] convertToProxyPositions(int dataPosition) {
-        // TODO
-        throw new NotImplementedError("convertToProxyPositions");
-    }
-
     private final RecyclerView.AdapterDataObserver innerAdapterDataObserver = new RecyclerView.AdapterDataObserver() {
+        @SuppressLint("NotifyDataSetChanged")
         @Override
         public void onChanged() {
             notifyDataSetChanged();
+            checkAndUpdateCurrentItem();
         }
 
+        @SuppressLint("NotifyDataSetChanged")
         @Override
         public void onItemRangeChanged(int positionStart, int itemCount) {
             notifyDataSetChanged();
         }
 
+        @SuppressLint("NotifyDataSetChanged")
         @Override
         public void onItemRangeChanged(int positionStart, int itemCount, @Nullable Object payload) {
             notifyDataSetChanged();
         }
 
+        @SuppressLint("NotifyDataSetChanged")
         @Override
         public void onItemRangeInserted(int positionStart, int itemCount) {
             notifyDataSetChanged();
+            checkAndUpdateCurrentItem();
         }
 
+        @SuppressLint("NotifyDataSetChanged")
         @Override
         public void onItemRangeRemoved(int positionStart, int itemCount) {
             notifyDataSetChanged();
+            checkAndUpdateCurrentItem();
         }
 
+        @SuppressLint("NotifyDataSetChanged")
         @Override
         public void onItemRangeMoved(int fromPosition, int toPosition, int itemCount) {
             notifyDataSetChanged();
@@ -124,6 +130,22 @@ final class ProxyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public void onStateRestorationPolicyChanged() {
             if (adapter != null) {
                 setStateRestorationPolicy(adapter.getStateRestorationPolicy());
+            }
+        }
+
+        private void checkAndUpdateCurrentItem() {
+            if (adapter != null) {
+                int newDataItemCount = adapter.getItemCount();
+                if (isLoppingActually()) {
+                    if (lastDataItemCount == 0 && newDataItemCount != 0) {
+                        loopViewPager2.setCurrentItem(0, false);
+                    } else if (loopViewPager2.lastPosition >= newDataItemCount) {
+                        loopViewPager2.setCurrentItem(0, false);
+                    }
+                }
+                lastDataItemCount = newDataItemCount;
+            } else {
+                lastDataItemCount = 0;
             }
         }
     };

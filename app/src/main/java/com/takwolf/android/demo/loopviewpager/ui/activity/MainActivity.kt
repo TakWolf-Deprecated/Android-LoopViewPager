@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.takwolf.android.demo.loopviewpager.R
 import com.takwolf.android.demo.loopviewpager.databinding.ActivityMainBinding
+import com.takwolf.android.demo.loopviewpager.model.Photo
 import com.takwolf.android.demo.loopviewpager.ui.adapter.PhotoPageAdapter
 import com.takwolf.android.demo.loopviewpager.vm.MainViewModel
 
@@ -15,6 +16,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
+
+        binding.refreshLayout.setOnRefreshListener {
+            viewMode.photosData.value = Photo.getList()
+            binding.refreshLayout.isRefreshing = false
+        }
 
         val adapter = PhotoPageAdapter(layoutInflater)
         binding.viewPager.adapter = adapter
@@ -26,6 +32,10 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        binding.switchLooping.setOnCheckedChangeListener { _, isChecked ->
+            viewMode.loopingData.value = isChecked
+        }
+
         viewMode.photosData.observe(this) { photos ->
             adapter.submitList(photos?.toList())
         }
@@ -33,6 +43,12 @@ class MainActivity : AppCompatActivity() {
         viewMode.orientationData.observe(this) {
             it?.let { orientation ->
                 binding.viewPager.orientation = orientation
+            }
+        }
+
+        viewMode.loopingData.observe(this) {
+            it?.let { looping ->
+                binding.viewPager.isLopping = looping
             }
         }
 

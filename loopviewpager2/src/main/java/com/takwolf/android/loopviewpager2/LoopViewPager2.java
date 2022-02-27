@@ -7,14 +7,18 @@ import android.util.AttributeSet;
 import androidx.annotation.AttrRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.Px;
 import androidx.annotation.StyleRes;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
 public class LoopViewPager2 extends HackViewPager2 {
     boolean lopping;
     int fakeOffset;
 
     private final ProxyAdapter proxyAdapter = new ProxyAdapter(this);
+
+    int lastPosition;
 
     public LoopViewPager2(@NonNull Context context) {
         this(context, null);
@@ -35,6 +39,43 @@ public class LoopViewPager2 extends HackViewPager2 {
         lopping = a.getBoolean(R.styleable.LoopViewPager2_lvp_lopping, true);
         fakeOffset = a.getInt(R.styleable.LoopViewPager2_lvp_fakeOffset, 1);
         a.recycle();
+
+        viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            private int position = 0;
+            private int positionOffsetPixels = 0;
+            private int state = ViewPager2.SCROLL_STATE_IDLE;
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, @Px int positionOffsetPixels) {
+                this.position = position;
+                this.positionOffsetPixels = positionOffsetPixels;
+                if (state == ViewPager2.SCROLL_STATE_DRAGGING || state == ViewPager2.SCROLL_STATE_SETTLING) {
+                    fixFakePagePosition();
+                }
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                lastPosition = proxyAdapter.convertToDataPosition(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(@ViewPager2.ScrollState int state) {
+                this.state = state;
+                if (state == ViewPager2.SCROLL_STATE_IDLE) {
+                    fixFakePagePosition();
+                }
+            }
+
+            private void fixFakePagePosition() {
+                if (proxyAdapter.isLoppingActually() && positionOffsetPixels == 0) {
+                    int targetPosition = proxyAdapter.convertToDataPosition(position) + fakeOffset;
+                    if (viewPager2.getCurrentItem() != targetPosition) {
+                        viewPager2.setCurrentItem(targetPosition, false);
+                    }
+                }
+            }
+        });
     }
 
     public boolean isLopping() {
@@ -43,9 +84,13 @@ public class LoopViewPager2 extends HackViewPager2 {
 
     public void setLopping(boolean lopping) {
         if (this.lopping != lopping) {
+            int currentItem = getCurrentItem();
             this.lopping = lopping;
-            super.setAdapter(null);
-            super.setAdapter(proxyAdapter);
+            if (proxyAdapter.getAdapter() != null) {
+                super.setAdapter(null);
+                super.setAdapter(proxyAdapter);
+                setCurrentItem(currentItem, false);
+            }
         }
     }
 
@@ -55,9 +100,13 @@ public class LoopViewPager2 extends HackViewPager2 {
 
     public void setFakeOffset(int fakeOffset) {
         if (this.fakeOffset != fakeOffset) {
+            int currentItem = getCurrentItem();
             this.fakeOffset = fakeOffset;
-            super.setAdapter(null);
-            super.setAdapter(proxyAdapter);
+            if (proxyAdapter.getAdapter() != null) {
+                super.setAdapter(null);
+                super.setAdapter(proxyAdapter);
+                setCurrentItem(currentItem, false);
+            }
         }
     }
 
@@ -73,6 +122,32 @@ public class LoopViewPager2 extends HackViewPager2 {
     public void setAdapter(@Nullable RecyclerView.Adapter adapter) {
         super.setAdapter(null);
         proxyAdapter.setAdapter(adapter);
-        super.setAdapter(proxyAdapter);
+        if (adapter != null) {
+            super.setAdapter(proxyAdapter);
+            setCurrentItem(0, false);
+        }
+    }
+
+    @Override
+    public int getCurrentItem() {
+        return proxyAdapter.convertToDataPosition(viewPager2.getCurrentItem());
+    }
+
+    @Override
+    public void setCurrentItem(int item) {
+        if (proxyAdapter.isLoppingActually()) {
+            viewPager2.setCurrentItem(item + fakeOffset);
+        } else {
+            viewPager2.setCurrentItem(item);
+        }
+    }
+
+    @Override
+    public void setCurrentItem(int item, boolean smoothScroll) {
+        if (proxyAdapter.isLoppingActually()) {
+            viewPager2.setCurrentItem(item + fakeOffset, smoothScroll);
+        } else {
+            viewPager2.setCurrentItem(item, smoothScroll);
+        }
     }
 }

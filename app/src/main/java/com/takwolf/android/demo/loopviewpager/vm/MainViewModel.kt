@@ -8,4 +8,5 @@ import com.takwolf.android.demo.loopviewpager.model.Photo
 class MainViewModel : ViewModel() {
     val photosData = MutableLiveData(Photo.getList())
     val orientationData = MutableLiveData(ViewPager2.ORIENTATION_HORIZONTAL)
+    val loopingData = MutableLiveData(true)
 }

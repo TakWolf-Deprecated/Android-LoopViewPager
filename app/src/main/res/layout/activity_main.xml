@@ -14,53 +14,68 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:title="@string/app_name" />
 
-    <androidx.core.widget.NestedScrollView
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-        <LinearLayout
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
 
-            <com.takwolf.android.loopviewpager2.LoopViewPager2
-                android:id="@+id/view_pager"
-                android:layout_width="match_parent"
-                android:layout_height="400dp"
-                android:padding="24dp"
-                android:background="@color/app_primary_translucent"
-                android:clipChildren="false"
-                android:clipToPadding="false"
-                app:lvp_fakeOffset="8" />
-
-            <RadioGroup
-                android:id="@+id/rg_orientation"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:orientation="horizontal"
-                android:checkedButton="@id/rb_horizontal">
+                android:orientation="vertical">
 
-                <RadioButton
-                    android:id="@+id/rb_horizontal"
-                    android:layout_width="0dp"
+                <com.takwolf.android.loopviewpager2.LoopViewPager2
+                    android:id="@+id/view_pager"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:padding="24dp"
+                    android:background="@color/app_primary_translucent"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    app:lvp_fakeOffset="8" />
+
+                <RadioGroup
+                    android:id="@+id/rg_orientation"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_margin="8dp"
-                    android:text="@string/horizontal" />
+                    android:padding="8dp"
+                    android:orientation="horizontal"
+                    android:checkedButton="@id/rb_horizontal">
 
-                <RadioButton
-                    android:id="@+id/rb_vertical"
-                    android:layout_width="0dp"
+                    <RadioButton
+                        android:id="@+id/rb_horizontal"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_margin="8dp"
+                        android:text="@string/horizontal" />
+
+                    <RadioButton
+                        android:id="@+id/rb_vertical"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_margin="8dp"
+                        android:text="@string/vertical" />
+
+                </RadioGroup>
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/switch_looping"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_margin="8dp"
-                    android:text="@string/vertical" />
+                    android:padding="16dp"
+                    android:text="@string/looping"
+                    android:checked="true" />
 
-            </RadioGroup>
+            </LinearLayout>
 
-        </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
 
-    </androidx.core.widget.NestedScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </LinearLayout>

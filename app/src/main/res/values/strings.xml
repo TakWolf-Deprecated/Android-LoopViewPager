@@ -2,5 +2,6 @@
 <resources>
     <string name="app_name">LoopViewPager</string>
     <string name="horizontal">Horizontal</string>
-    <string name="vertical">vertical</string>
+    <string name="vertical">Vertical</string>
+    <string name="looping">Looping</string>
 </resources>
