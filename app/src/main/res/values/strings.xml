@@ -4,4 +4,7 @@
     <string name="horizontal">Horizontal</string>
     <string name="vertical">Vertical</string>
     <string name="looping">Looping</string>
+    <string name="auto">Auto</string>
+    <string name="prev">Prev</string>
+    <string name="next">Next</string>
 </resources>

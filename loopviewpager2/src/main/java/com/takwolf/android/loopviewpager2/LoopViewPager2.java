@@ -157,6 +157,32 @@ public class LoopViewPager2 extends HackViewPager2 {
         }
     }
 
+    public void setPrevItem() {
+        setPrevItem(true);
+    }
+
+    public void setPrevItem(boolean smoothScroll) {
+        int prevPosition = viewPager2.getCurrentItem() - 1;
+        int itemCount = proxyAdapter.getItemCount();
+        if (prevPosition < 0) {
+            prevPosition += itemCount;
+        }
+        viewPager2.setCurrentItem(prevPosition, smoothScroll);
+    }
+
+    public void setNextItem() {
+        setNextItem(true);
+    }
+
+    public void setNextItem(boolean smoothScroll) {
+        int nextPosition = viewPager2.getCurrentItem() + 1;
+        int itemCount = proxyAdapter.getItemCount();
+        if (nextPosition >= itemCount) {
+            nextPosition -= itemCount;
+        }
+        viewPager2.setCurrentItem(nextPosition, smoothScroll);
+    }
+
     @Override
     public void registerOnPageChangeCallback(@NonNull ViewPager2.OnPageChangeCallback callback) {
         pageChangeEventDispatcher.addOnPageChangeCallback(callback);
