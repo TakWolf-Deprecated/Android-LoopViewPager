@@ -17,6 +17,7 @@ public class LoopViewPager2 extends HackViewPager2 {
     int fakeOffset;
 
     private final ProxyAdapter proxyAdapter = new ProxyAdapter(this);
+    private final CompositeOnPageChangeCallback pageChangeEventDispatcher = new CompositeOnPageChangeCallback(3);
 
     int lastPosition;
 
@@ -52,11 +53,15 @@ public class LoopViewPager2 extends HackViewPager2 {
                 if (state == ViewPager2.SCROLL_STATE_DRAGGING || state == ViewPager2.SCROLL_STATE_SETTLING) {
                     fixFakePagePosition();
                 }
+                int dataPosition = proxyAdapter.convertToDataPosition(position);
+                pageChangeEventDispatcher.onPageScrolled(dataPosition, positionOffset, positionOffsetPixels);
             }
 
             @Override
             public void onPageSelected(int position) {
-                lastPosition = proxyAdapter.convertToDataPosition(position);
+                int dataPosition = proxyAdapter.convertToDataPosition(position);
+                lastPosition = dataPosition;
+                pageChangeEventDispatcher.onPageSelected(dataPosition);
             }
 
             @Override
@@ -65,6 +70,7 @@ public class LoopViewPager2 extends HackViewPager2 {
                 if (state == ViewPager2.SCROLL_STATE_IDLE) {
                     fixFakePagePosition();
                 }
+                pageChangeEventDispatcher.onPageScrollStateChanged(state);
             }
 
             private void fixFakePagePosition() {
@@ -149,5 +155,23 @@ public class LoopViewPager2 extends HackViewPager2 {
         } else {
             viewPager2.setCurrentItem(item, smoothScroll);
         }
+    }
+
+    @Override
+    public void registerOnPageChangeCallback(@NonNull ViewPager2.OnPageChangeCallback callback) {
+        pageChangeEventDispatcher.addOnPageChangeCallback(callback);
+    }
+
+    @Override
+    public void unregisterOnPageChangeCallback(@NonNull ViewPager2.OnPageChangeCallback callback) {
+        pageChangeEventDispatcher.removeOnPageChangeCallback(callback);
+    }
+
+    public void registerRawOnPageChangeCallback(@NonNull ViewPager2.OnPageChangeCallback callback) {
+        viewPager2.registerOnPageChangeCallback(callback);
+    }
+
+    public void unregisterRawOnPageChangeCallback(@NonNull ViewPager2.OnPageChangeCallback callback) {
+        viewPager2.unregisterOnPageChangeCallback(callback);
     }
 }
