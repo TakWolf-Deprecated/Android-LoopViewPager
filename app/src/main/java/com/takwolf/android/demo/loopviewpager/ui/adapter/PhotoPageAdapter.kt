@@ -17,17 +17,17 @@ class PhotoPageAdapter(private val layoutInflater: LayoutInflater) : ListAdapter
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(getItem(position), position)
     }
 
     class ViewHolder(private val binding: ItemPageBinding) : RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("SetTextI18n")
-        fun bind(photo: Photo) {
+        fun bind(photo: Photo, position: Int) {
             binding.imgPhoto.load(photo.url) {
                 placeholder(R.color.image_placeholder)
                 error(R.color.image_placeholder)
             }
-            binding.tvInfo.text = "$bindingAdapterPosition - $absoluteAdapterPosition"
+            binding.tvInfo.text = "$position - $bindingAdapterPosition - $absoluteAdapterPosition"
         }
     }
 }
