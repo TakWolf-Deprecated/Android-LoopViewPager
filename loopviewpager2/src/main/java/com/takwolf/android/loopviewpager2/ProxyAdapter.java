@@ -94,33 +94,28 @@ final class ProxyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             checkAndUpdateCurrentItem();
         }
 
-        @SuppressLint("NotifyDataSetChanged")
         @Override
         public void onItemRangeChanged(int positionStart, int itemCount) {
             notifyDataSetChanged();
         }
 
-        @SuppressLint("NotifyDataSetChanged")
         @Override
         public void onItemRangeChanged(int positionStart, int itemCount, @Nullable Object payload) {
             notifyDataSetChanged();
         }
 
-        @SuppressLint("NotifyDataSetChanged")
         @Override
         public void onItemRangeInserted(int positionStart, int itemCount) {
             notifyDataSetChanged();
             checkAndUpdateCurrentItem();
         }
 
-        @SuppressLint("NotifyDataSetChanged")
         @Override
         public void onItemRangeRemoved(int positionStart, int itemCount) {
             notifyDataSetChanged();
             checkAndUpdateCurrentItem();
         }
 
-        @SuppressLint("NotifyDataSetChanged")
         @Override
         public void onItemRangeMoved(int fromPosition, int toPosition, int itemCount) {
             notifyDataSetChanged();

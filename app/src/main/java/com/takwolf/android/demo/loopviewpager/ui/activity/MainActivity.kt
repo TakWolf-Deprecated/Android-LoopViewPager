@@ -8,6 +8,8 @@ import androidx.viewpager2.widget.ViewPager2
 import com.takwolf.android.demo.loopviewpager.R
 import com.takwolf.android.demo.loopviewpager.databinding.ActivityMainBinding
 import com.takwolf.android.demo.loopviewpager.model.Photo
+import com.takwolf.android.demo.loopviewpager.ui.adapter.OnPhotoDeleteListener
+import com.takwolf.android.demo.loopviewpager.ui.adapter.OnPhotosSwapListener
 import com.takwolf.android.demo.loopviewpager.ui.adapter.PhotoPageAdapter
 import com.takwolf.android.demo.loopviewpager.vm.MainViewModel
 import kotlinx.coroutines.delay
@@ -24,7 +26,10 @@ class MainActivity : AppCompatActivity() {
             binding.refreshLayout.isRefreshing = false
         }
 
-        val adapter = PhotoPageAdapter(layoutInflater)
+        val adapter = PhotoPageAdapter(layoutInflater).apply {
+            onPhotosSwapListener = OnPhotosSwapListener(viewMode.photosData)
+            onPhotoDeleteListener = OnPhotoDeleteListener(viewMode.photosData)
+        }
         binding.viewPager.adapter = adapter
 
         lifecycleScope.launchWhenResumed {

@@ -36,7 +36,7 @@
                     android:background="@color/app_primary_translucent"
                     android:clipChildren="false"
                     android:clipToPadding="false"
-                    app:lvp_fakeOffset="8" />
+                    app:lvp_fakeOffset="2" />
 
                 <RadioGroup
                     android:id="@+id/rg_orientation"
