@@ -4,12 +4,13 @@ plugins {
 }
 
 android {
-    compileSdk = 32
+    namespace = "com.takwolf.android.demo.loopviewpager"
+    compileSdk = 33
 
     defaultConfig {
         applicationId = "com.takwolf.android.demo.loopviewpager"
         minSdk = 21
-        targetSdk = 32
+        targetSdk = 33
         versionCode = 1
         versionName = "0.0.1"
     }
